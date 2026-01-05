@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-18238Y9WWV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-18238Y9WWV');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TabNote.one is a simple, browser-based notepad for quick, temporary notes that stay private and disappear when you're done. No signups or persistence.">
+    <meta name="keywords" content="browser notepad, temporary notes, privacy, quick notes, simple notepad, note-taking app, no persistence">
+    <meta property="og:title" content="TabNote.one: Private, Temporary Notepad">
+    <meta property="og:description" content="A simple, browser-based notepad for quick, temporary notes that stay private and disappear when you're done.">
+    <meta property="og:image" content="path_to_image.jpg">
+    <title>TabNote.one - Your Private, Temporary Notepad</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        /* Default (Light Theme) */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        /* Dark Theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #191919;
+                --text-color: #ffffff;
+            }
+        }
+        html, body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        #container {
+            position: relative;
+            display: inline-block;
+            width: 70%;
+            max-width: 100%;
+        }
+        #message {
+            margin: 6vh;
+            font-family: monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            opacity: 81%;
+            box-sizing: border-box;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            line-height: 1.5;
+            overflow: auto;
+        }
+        #resize-handle {
+            width: 5px;
+            height: 100%;
+            margin-top: 7vh;
+            cursor: ew-resize;
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background-color: transparent;
+            transition: background-color 0.3s;
+        }
+        #resize-handle:hover {
+            background-color: rgba(135, 206, 235, 0.5); /* Soft blue color */
+        }
+</style>
+<title>TabNote.one</title>
+</head>
+<body>
+    <div id="container">
+        <div id="message" contenteditable="true"></div>
+        <div id="resize-handle"></div>
+    </div>
+    <script>
+        window.onload = function() {
+            const messageDiv = document.getElementById("message");
+            const containerDiv = document.getElementById("container");
+            const resizeHandle = document.getElementById("resize-handle");
+
+            const savedContent = sessionStorage.getItem("noteContent");
+            if (savedContent) {
+                messageDiv.innerHTML = savedContent;
+            } else {
+                messageDiv.innerHTML = "Got a thought? Jot it down here! (P.S. Your notes stay right here in your browser and won’t be sent anywhere)";
+                setTimeout(() => {
+                    document.execCommand('selectAll', false, null);
+                }, 0);
+            }
+
+            messageDiv.addEventListener('input', function() {
+                sessionStorage.setItem("noteContent", messageDiv.innerHTML);
+            });
+
+            messageDiv.focus();
+
+            resizeHandle.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', stopResize);
+            });
+
+            function resize(e) {
+                containerDiv.style.width = e.clientX - containerDiv.offsetLeft + 'px';
+                resizeHandle.style.backgroundColor = 'rgba(135, 206, 235, 0.5)';
+            }
+
+            function stopResize() {
+                document.removeEventListener('mousemove', resize);
+                document.removeEventListener('mouseup', stopResize);
+                resizeHandle.style.backgroundColor = '';
+            }
+        }
+    </script>
+</body>
+</html>
